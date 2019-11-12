@@ -17,7 +17,7 @@ pipeline {
                                 sh """docker build \
                                 --build-arg JAVA_VERSION=${props.java} \
                                 --build-arg MAVEN_VERSION=${props.maven} \
-                                ${props.tags.collect { tag -> "-t ${env.IMAGE_NAME}:${tag}" }.join(" ") } \
+                                ${collectTags(props.tags, env.IMAGE_NAME)} \
                                 .
                             """
                             }
@@ -29,4 +29,9 @@ pipeline {
             }
         }
     }
+}
+
+@NonCPS
+String collectTags(final List<String> tags, final String imageName) {
+    return tags.collect { tag -> "-t ${imageName}:${tag}" }.join(" ")
 }
